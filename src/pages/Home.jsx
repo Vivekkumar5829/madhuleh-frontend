@@ -7,8 +7,8 @@ import ProductCard from '../components/ui/ProductCard'
 import SkeletonCard from '../components/ui/SkeletonCard'
 
 const HERO_IMGS = [
-  'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=700&q=85',
   'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=700&q=85',
+  'https://plus.unsplash.com/premium_photo-1663957861996-8093b48a22e6?w=1200&q=85',
   'https://images.unsplash.com/photo-1471943311424-646960669fbc?w=700&q=85',
 ]
 
