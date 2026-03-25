@@ -37,14 +37,15 @@ export default function Contact() {
 
       <div className="container py-12">
         <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+
           {/* Left: Info */}
           <div>
             <div className="space-y-6 mb-10">
               {[
-                { icon: Phone, title: 'Call Us',       sub: 'Mon–Sat, 9am–6pm', val: '+91 98765 43210', href: 'tel:+919876543210' },
-                { icon: Mail,  title: 'Email Us',      sub: 'We reply within 24h', val: 'hello@madhuleh.com', href: 'mailto:hello@madhuleh.com' },
-                { icon: MapPin, title: 'Visit Us',     sub: 'By appointment only', val: '42 Honey Lane, Bangalore — 560001' },
-                { icon: Clock, title: 'Working Hours', sub: '',                   val: 'Mon–Sat: 9am – 6pm IST' },
+                { icon: Phone,  title: 'Call Us',       sub: 'Mon–Sat, 9am–6pm',   val: '+91 98765 43210',          href: 'tel:+919834343705' },
+                { icon: Mail,   title: 'Email Us',      sub: 'We reply within 24h', val: 'madhulehapairy@gmail.com', href: 'mailto:madhulehapairy@gmail.com' },
+                { icon: MapPin, title: 'Visit Us',      sub: 'By appointment only', val: 'Madhule Apiary, At - Pimplagon road Near circle office, Post- Manchar, Tal- Ambegon, Dist - Pune 410503, Maharashtra, India' },
+                { icon: Clock,  title: 'Working Hours', sub: '',                    val: 'Mon–Sat: 9am – 6pm IST' },
               ].map(({ icon: Icon, title, sub, val, href }) => (
                 <div key={title} className="card p-5 flex items-start gap-4">
                   <div className="w-11 h-11 bg-honey-50 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -62,12 +63,18 @@ export default function Contact() {
               ))}
             </div>
 
-            {/* Map placeholder */}
-            <div className="card overflow-hidden h-48 bg-honey-50 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin size={32} className="text-honey-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">Bangalore, Karnataka</p>
-              </div>
+            {/* Google Maps Embed */}
+            <div className="card overflow-hidden h-48">
+              <iframe
+                title="Madhuleh Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d56957.43231718764!2d73.94212190663426!3d20.169635905729915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdddad08f0efbc5%3A0xce8131b0c54d3c09!2sPimpalgaon%20Baswant%2C%20Maharashtra!5e1!3m2!1sen!2sin!4v1774466910371!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </div>
 
@@ -89,7 +96,7 @@ export default function Contact() {
                     <div>
                       <label className="label">Your Name *</label>
                       <input value={form.name} onChange={e => set('name', e.target.value)}
-                        className="input" placeholder="Madhuleh Apairy" required />
+                        className="input" placeholder="Your Name" required />
                     </div>
                     <div>
                       <label className="label">Phone</label>
@@ -123,6 +130,7 @@ export default function Contact() {
               </>
             )}
           </div>
+
         </div>
       </div>
     </div>
