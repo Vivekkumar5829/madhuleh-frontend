@@ -1,0 +1,7 @@
+Add these methods to your existing AddressRepository.java:
+
+    List<Address> findByUserIdAndDeletedFalse(UUID userId);
+    Optional<Address> findByIdAndUserIdAndDeletedFalse(UUID id, UUID userId);
+
+Your AddressRepository should extend JpaRepository<Address, UUID>.
+Spring Data JPA will auto-implement these from the method names.

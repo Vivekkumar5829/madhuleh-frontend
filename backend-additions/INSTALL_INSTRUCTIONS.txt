@@ -1,0 +1,17 @@
+=== Backend Changes Required ===
+
+1. Copy AddressController.java to:
+   src/main/java/com/madhuleh/controller/AddressController.java
+
+2. Copy AddressResponse.java to:
+   src/main/java/com/madhuleh/dto/response/AddressResponse.java
+
+3. In your existing AddressRepository.java, add:
+   List<Address> findByUserIdAndDeletedFalse(UUID userId);
+   Optional<Address> findByIdAndUserIdAndDeletedFalse(UUID id, UUID userId);
+
+4. Make sure Address entity has a 'deleted' field (BaseEntity likely provides this).
+   If not, add: @Column(nullable=false) @Builder.Default private boolean deleted = false;
+
+That's it — Spring Boot will handle the rest automatically.
+No new migration needed — addresses table already exists.
