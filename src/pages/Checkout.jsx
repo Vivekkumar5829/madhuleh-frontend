@@ -8,7 +8,6 @@ import toast from 'react-hot-toast'
 import Spinner from '../components/ui/Spinner'
 
 const IMG_FALLBACK = 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=100&q=70'
-
 const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID
 
 const INDIAN_STATES = [
@@ -114,10 +113,17 @@ export default function Checkout() {
         return
       }
 
-      // Step 4 — Razorpay → open payment popup
+      // Step 4 — Razorpay → check if loaded
+      if (!window.Razorpay) {
+        toast.error('Payment gateway not loaded. Please refresh the page.')
+        setPlacing(false)
+        return
+      }
+
+      // Step 5 — Open Razorpay popup
       const options = {
         key: RAZORPAY_KEY,
-        amount: Math.round(total * 100), // in paise
+        amount: Math.round(total * 100),
         currency: 'INR',
         name: 'Madhuleh',
         description: 'Pure Organic Honey',
@@ -125,7 +131,6 @@ export default function Checkout() {
         order_id: order.razorpayOrderId,
         handler: async (response) => {
           try {
-            // Verify payment with backend
             await ordersAPI.verifyPayment({
               razorpayOrderId:   response.razorpay_order_id,
               razorpayPaymentId: response.razorpay_payment_id,
@@ -228,8 +233,8 @@ export default function Checkout() {
               </h2>
               <div className="space-y-3">
                 {[
-                  { value: 'CASH_ON_DELIVERY', label: 'Cash on Delivery',      sub: 'Pay when your order arrives',      icon: '💵' },
-                  { value: 'RAZORPAY',          label: 'UPI / Cards / NetBanking', sub: 'Pay securely via Razorpay',     icon: '💳' },
+                  { value: 'CASH_ON_DELIVERY', label: 'Cash on Delivery',         sub: 'Pay when your order arrives', icon: '💵' },
+                  { value: 'RAZORPAY',          label: 'UPI / Cards / NetBanking', sub: 'Pay securely via Razorpay',   icon: '💳' },
                 ].map(({ value, label, sub, icon }) => (
                   <label key={value}
                     className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
