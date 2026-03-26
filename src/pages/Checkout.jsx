@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { Shield, Truck, Check, Tag, ChevronRight, AlertCircle } from 'lucide-react'
+import { Shield, Truck, Check, Tag, ChevronRight } from 'lucide-react'
 import { ordersAPI, addressAPI, couponsAPI, unwrap } from '../services/api'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
@@ -8,6 +8,8 @@ import toast from 'react-hot-toast'
 import Spinner from '../components/ui/Spinner'
 
 const IMG_FALLBACK = 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=100&q=70'
+
+const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID
 
 const INDIAN_STATES = [
   'Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana',
@@ -27,13 +29,13 @@ export default function Checkout() {
     phone: '', addressLine1: '', addressLine2: '',
     city: '', state: 'Maharashtra', pincode: '',
   })
-  const [payMethod, setPayMethod] = useState('CASH_ON_DELIVERY')
-  const [coupon,   setCoupon]     = useState('')
-  const [discount, setDiscount]   = useState(0)
-  const [couponOk, setCouponOk]   = useState(false)
-  const [couponErr, setCouponErr] = useState('')
-  const [placing,  setPlacing]    = useState(false)
-  const [valCoupon, setValCoupon] = useState(false)
+  const [payMethod,  setPayMethod] = useState('CASH_ON_DELIVERY')
+  const [coupon,     setCoupon]    = useState('')
+  const [discount,   setDiscount]  = useState(0)
+  const [couponOk,   setCouponOk]  = useState(false)
+  const [couponErr,  setCouponErr] = useState('')
+  const [placing,    setPlacing]   = useState(false)
+  const [valCoupon,  setValCoupon] = useState(false)
 
   const shipping = subtotal >= 499 ? 0 : 60
   const tax      = +(subtotal * 0.18).toFixed(2)
@@ -71,17 +73,23 @@ export default function Checkout() {
     } finally { setValCoupon(false) }
   }
 
-  const handlePlaceOrder = async () => {
+  const validateAddress = () => {
     const required = ['firstName', 'lastName', 'phone', 'addressLine1', 'city', 'state', 'pincode']
     for (const f of required) {
       if (!address[f]?.trim()) {
         toast.error(`Please fill in ${f.replace(/([A-Z])/g, ' $1').toLowerCase()}`)
-        return
+        return false
       }
     }
+    return true
+  }
 
+  const handlePlaceOrder = async () => {
+    if (!validateAddress()) return
     setPlacing(true)
+
     try {
+      // Step 1 — Save address
       const addrRes = await addressAPI.create({
         ...address,
         country: 'India',
@@ -91,6 +99,7 @@ export default function Checkout() {
       const addressId = unwrap(addrRes)?.id
       if (!addressId) throw new Error('Failed to save address')
 
+      // Step 2 — Create order
       const orderRes = await ordersAPI.create({
         addressId,
         paymentMethod: payMethod,
@@ -98,12 +107,62 @@ export default function Checkout() {
       })
       const order = unwrap(orderRes)
 
-      await clearCart()
-      navigate(`/order-confirmation/${order.orderNumber}`)
+      // Step 3 — COD → go to confirmation directly
+      if (payMethod === 'CASH_ON_DELIVERY') {
+        await clearCart()
+        navigate(`/order-confirmation/${order.orderNumber}`)
+        return
+      }
+
+      // Step 4 — Razorpay → open payment popup
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: Math.round(total * 100), // in paise
+        currency: 'INR',
+        name: 'Madhuleh',
+        description: 'Pure Organic Honey',
+        image: 'https://res.cloudinary.com/dfh9jk0h6/image/upload/v1774464409/Madhuleh_pdf__2__page-0001-removebg-preview_mkvudm.png',
+        order_id: order.razorpayOrderId,
+        handler: async (response) => {
+          try {
+            // Verify payment with backend
+            await ordersAPI.verifyPayment({
+              razorpayOrderId:   response.razorpay_order_id,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            })
+            await clearCart()
+            navigate(`/order-confirmation/${order.orderNumber}`)
+            toast.success('Payment successful! 🍯')
+          } catch {
+            toast.error('Payment verification failed. Please contact support.')
+          }
+        },
+        prefill: {
+          name:    `${address.firstName} ${address.lastName}`,
+          email:   user.email,
+          contact: address.phone,
+        },
+        theme: {
+          color: '#F5A800',
+        },
+        modal: {
+          ondismiss: () => {
+            toast.error('Payment cancelled')
+            setPlacing(false)
+          }
+        }
+      }
+
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+
     } catch (err) {
       const msg = err.response?.data?.message || err.message || 'Failed to place order'
       toast.error(msg)
-    } finally { setPlacing(false) }
+    } finally {
+      setPlacing(false)
+    }
   }
 
   const inp = (field, label, props = {}) => (
@@ -130,8 +189,10 @@ export default function Checkout() {
 
       <div className="container py-10">
         <div className="grid lg:grid-cols-3 gap-8 items-start">
+
           {/* ── Left: Address + Payment ── */}
           <div className="lg:col-span-2 space-y-6">
+
             {/* Delivery address */}
             <div className="card p-6">
               <h2 className="font-display font-bold text-lg text-bark-900 mb-5 flex items-center gap-2">
@@ -167,8 +228,8 @@ export default function Checkout() {
               </h2>
               <div className="space-y-3">
                 {[
-                  { value: 'CASH_ON_DELIVERY', label: 'Cash on Delivery', sub: 'Pay when your order arrives', icon: '💵' },
-                  { value: 'RAZORPAY', label: 'Razorpay / UPI / Cards', sub: 'Pay securely online via Razorpay', icon: '💳' },
+                  { value: 'CASH_ON_DELIVERY', label: 'Cash on Delivery',      sub: 'Pay when your order arrives',      icon: '💵' },
+                  { value: 'RAZORPAY',          label: 'UPI / Cards / NetBanking', sub: 'Pay securely via Razorpay',     icon: '💳' },
                 ].map(({ value, label, sub, icon }) => (
                   <label key={value}
                     className={`flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all ${
@@ -189,18 +250,12 @@ export default function Checkout() {
                   </label>
                 ))}
               </div>
-
-              {payMethod === 'RAZORPAY' && (
-                <div className="mt-3 flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-                  <AlertCircle size={14} className="text-amber-600 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-amber-700">Razorpay integration requires test keys. Configure in <code>.env</code> to enable live payments.</p>
-                </div>
-              )}
             </div>
           </div>
 
           {/* ── Right: Order summary ── */}
           <div className="space-y-4">
+
             {/* Coupon */}
             <div className="card p-5">
               <h3 className="font-bold text-bark-900 text-sm mb-3 flex items-center gap-2">
@@ -226,7 +281,6 @@ export default function Checkout() {
               {/* Items */}
               <div className="space-y-3 mb-4">
                 {items.map(item => {
-                  // ✅ Fixed: flat CartItemResponse fields
                   const img  = item.productImageUrl || IMG_FALLBACK
                   const name = item.productName     || 'Product'
                   return (
@@ -267,7 +321,7 @@ export default function Checkout() {
                 className="btn-primary w-full justify-center mt-5 disabled:opacity-60">
                 {placing
                   ? <><Spinner size="sm" className="border-bark-900/30 border-t-bark-900" /> Placing Order…</>
-                  : 'Place Order'}
+                  : payMethod === 'RAZORPAY' ? 'Pay Now' : 'Place Order'}
               </button>
 
               <p className="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
