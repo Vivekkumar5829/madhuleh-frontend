@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Shield, Truck, Check, Tag, ChevronRight } from 'lucide-react'
 import { ordersAPI, addressAPI, couponsAPI, unwrap } from '../services/api'
@@ -22,6 +22,7 @@ export default function Checkout() {
   const { items, subtotal, clearCart } = useCart()
   const { user }                       = useAuth()
   const navigate                       = useNavigate()
+  const orderRef                       = useRef(null)
 
   const [address, setAddress]   = useState({
     firstName: user?.firstName || '', lastName: user?.lastName || '',
@@ -106,6 +107,9 @@ export default function Checkout() {
       })
       const order = unwrap(orderRes)
 
+      // Store order in ref for use in Razorpay handler
+      orderRef.current = order
+
       // Step 3 — COD → go to confirmation directly
       if (payMethod === 'CASH_ON_DELIVERY') {
         await clearCart()
@@ -130,16 +134,19 @@ export default function Checkout() {
         image: 'https://res.cloudinary.com/dfh9jk0h6/image/upload/v1774464409/Madhuleh_pdf__2__page-0001-removebg-preview_mkvudm.png',
         order_id: order.razorpayOrderId,
         handler: async (response) => {
+          // Log what Razorpay returns
+          console.log('Razorpay response:', response)
           try {
             await ordersAPI.verifyPayment({
-              razorpayOrderId:   response.razorpay_order_id,
+              razorpayOrderId:   response.razorpay_order_id   || order.razorpayOrderId,
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,
             })
             await clearCart()
-            navigate(`/order-confirmation/${order.orderNumber}`)
+            navigate(`/order-confirmation/${orderRef.current.orderNumber}`)
             toast.success('Payment successful! 🍯')
-          } catch {
+          } catch (err) {
+            console.error('Verify payment error:', err)
             toast.error('Payment verification failed. Please contact support.')
           }
         },
