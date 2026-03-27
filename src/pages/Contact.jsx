@@ -44,7 +44,7 @@ export default function Contact() {
               {[
                 { icon: Phone,  title: 'Call Us',       sub: 'Mon–Sat, 9am–6pm',   val: '+91 98765 43210',          href: 'tel:+919834343705' },
                 { icon: Mail,   title: 'Email Us',      sub: 'We reply within 24h', val: 'madhulehapairy@gmail.com', href: 'mailto:madhulehapairy@gmail.com' },
-                { icon: MapPin, title: 'Visit Us',      sub: 'By appointment only', val: 'Madhule Apiary, At - Pimplagon road Near circle office, Post- Manchar, Tal- Ambegon, Dist - Pune 410503, Maharashtra, India' },
+                { icon: MapPin, title: 'Visit Us',      sub: 'By appointment only', val: 'Madhule Apiary, At- Kadus Road, Madhuleh Apairy, Post -Donde, Tal -Khed, Dist -Pune Pin Code -410505' },
                 { icon: Clock,  title: 'Working Hours', sub: '',                    val: 'Mon–Sat: 9am – 6pm IST' },
               ].map(({ icon: Icon, title, sub, val, href }) => (
                 <div key={title} className="card p-5 flex items-start gap-4">
@@ -67,7 +67,7 @@ export default function Contact() {
             <div className="card overflow-hidden h-48">
               <iframe
                 title="Madhuleh Location"
-                src="<iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3588.410355074914!2d73.84592677520037!3d18.878014882286223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTjCsDUyJzQwLjkiTiA3M8KwNTAnNTQuNiJF!5e1!3m2!1sen!2sin!4v1774631827168!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3588.410355074914!2d73.84592677520037!3d18.878014882286223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTjCsDUyJzQwLjkiTiA3M8KwNTAnNTQuNiJF!5e1!3m2!1sen!2sin!4v1774631827168!5m2!1sen!2sin"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
