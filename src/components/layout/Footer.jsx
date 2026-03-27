@@ -129,10 +129,9 @@ export default function Footer() {
                 madhulehapairy@gmail.com
               </a>
               <p className="flex items-start gap-2.5">
-                <MapPin size={38} className="text-honey-500 mt-0.5" />{" "}
-                Manufactured & marketed by Madhule apsory At - Pimplagon road
-                Near circle office, Post- Manchar,Tal- Ambegon, Dist - Pune
-                410503, Maharashtra, India
+                <MapPin size={38} className="text-honey-500 mt-0.5" /> Operation
+                At- Kadus Road, Madhuleh Apairy, Post -Donde, Tal -Khed, Dist
+                -Pune Pin Code -410505
               </p>
             </div>
             <div className="flex gap-3 mt-6">

@@ -67,7 +67,7 @@ export default function Contact() {
             <div className="card overflow-hidden h-48">
               <iframe
                 title="Madhuleh Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d56957.43231718764!2d73.94212190663426!3d20.169635905729915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdddad08f0efbc5%3A0xce8131b0c54d3c09!2sPimpalgaon%20Baswant%2C%20Maharashtra!5e1!3m2!1sen!2sin!4v1774466910371!5m2!1sen!2sin"
+                src="<iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3588.410355074914!2d73.84592677520037!3d18.878014882286223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTjCsDUyJzQwLjkiTiA3M8KwNTAnNTQuNiJF!5e1!3m2!1sen!2sin!4v1774631827168!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
