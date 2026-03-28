@@ -44,7 +44,7 @@ export default function Contact() {
               {[
                 { icon: Phone,  title: 'Call Us',       sub: 'Mon–Sat, 9am–6pm',   val: '+91 98765 43210',          href: 'tel:+919834343705' },
                 { icon: Mail,   title: 'Email Us',      sub: 'We reply within 24h', val: 'madhulehapairy@gmail.com', href: 'mailto:madhulehapairy@gmail.com' },
-                { icon: MapPin, title: 'Visit Us',      sub: 'By appointment only', val: 'Madhule Apiary, At- Kadus Road, Madhuleh Apairy, Post -Donde, Tal -Khed, Dist -Pune Pin Code -410505' },
+                { icon: MapPin, title: 'Visit Us',      sub: 'By appointment only', val: 'At- Kadus Road, Madhuleh Apairy, Post -Donde, Tal -Khed, Dist -Pune Pin Code -410505' },
                 { icon: Clock,  title: 'Working Hours', sub: '',                    val: 'Mon–Sat: 9am – 6pm IST' },
               ].map(({ icon: Icon, title, sub, val, href }) => (
                 <div key={title} className="card p-5 flex items-start gap-4">
