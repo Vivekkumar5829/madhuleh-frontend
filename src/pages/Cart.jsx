@@ -10,9 +10,9 @@ const IMG_FALLBACK = 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?
 export default function Cart() {
   const { items, loading, count, subtotal, updateQty, removeItem, clearCart } = useCart()
 
-  const shipping = subtotal >= 499 ? 0 : 60
-  const tax      = +(subtotal * 0.18).toFixed(2)
-  const total    = +(subtotal + shipping + tax).toFixed(2)
+  // ✅ GST included in price — no separate tax
+  const shipping = subtotal >= 499 ? 0 : 49
+  const total    = +(subtotal + shipping).toFixed(2)
 
   if (loading) return (
     <div className="min-h-[60vh] flex items-center justify-center">
@@ -53,8 +53,6 @@ export default function Cart() {
             </div>
 
             {items.map(item => {
-              // Backend CartItemResponse flat fields:
-              // id, productId, productName, productImageUrl, unitPrice, quantity, subtotal
               const img   = item.productImageUrl || IMG_FALLBACK
               const name  = item.productName     || 'Product'
               const price = parseFloat(item.unitPrice || 0)
@@ -115,9 +113,10 @@ export default function Cart() {
                     {shipping === 0 ? 'FREE' : `₹${shipping}`}
                   </span>
                 </div>
+                {/* ✅ GST included in price */}
                 <div className="flex justify-between text-bark-700">
-                  <span>GST (18%)</span>
-                  <span className="font-semibold">₹{tax.toFixed(0)}</span>
+                  <span>GST</span>
+                  <span className="font-semibold text-green-600">Included in price</span>
                 </div>
 
                 {shipping > 0 && (
