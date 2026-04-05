@@ -94,16 +94,16 @@ export default function ShippingPolicy() {
 
           <section>
             <h2 className="font-display text-xl font-bold text-bark-900 mb-3">7. Damaged or Lost Packages</h2>
-            <p>If your package arrives damaged or is lost in transit, please contact us immediately at <a href="mailto:support@madhuleh.com" className="text-honey-600 hover:underline">support@madhuleh.com</a> with your order number and photos of the damage. We will arrange a replacement or full refund at no extra cost.</p>
+            <p>If your package arrives damaged or is lost in transit, please contact us immediately at <a href="mailto:madhulehapairy@gmail.com" className="text-honey-600 hover:underline">support@madhuleh.com</a> with your order number and photos of the damage. We will arrange a replacement or full refund at no extra cost.</p>
           </section>
 
           <section>
             <h2 className="font-display text-xl font-bold text-bark-900 mb-3">8. Contact Us</h2>
             <p>For any shipping related queries:</p>
             <div className="mt-3 bg-cream-200 rounded-xl p-4 text-sm space-y-1">
-              <p><strong>Madhuleh</strong></p>
-              <p>Pimpalgaon Baswant, Maharashtra, India</p>
-              <p>Email: <a href="mailto:support@madhuleh.com" className="text-honey-600 hover:underline">support@madhuleh.com</a></p>
+              <p><strong>Madhuleh Apairy</strong></p>
+              <p> Kadus Road, Post -Donde, Tal -Khed, Dist -Pune Pin Code -410505</p>
+              <p>Email: <a href="mailto:madhulehapairy@gmail.com" className="text-honey-600 hover:underline">madhulehapairy@gmail.com</a></p>
               <p>Website: <Link to="/" className="text-honey-600 hover:underline">madhuleh.com</Link></p>
             </div>
           </section>

@@ -85,9 +85,9 @@ export default function TermsOfService() {
             <h2 className="font-display text-xl font-bold text-bark-900 mb-3">10. Contact Us</h2>
             <p>For any questions regarding these Terms of Service:</p>
             <div className="mt-3 bg-cream-200 rounded-xl p-4 text-sm">
-              <p><strong>Madhuleh</strong></p>
-              <p>Pimpalgaon Baswant, Maharashtra, India</p>
-              <p>Email: <a href="mailto:support@madhuleh.com" className="text-honey-600 hover:underline">support@madhuleh.com</a></p>
+              <p><strong>Madhuleh Apairy</strong></p>
+              <p>Kadus Road, Post -Donde, Tal -Khed, Dist -Pune Pin Code -410505</p>
+              <p>Email: <a href="mailto:madhulehapairy@gmail.com" className="text-honey-600 hover:underline">madhulehapairy@gmail.com</a></p>
               <p>Website: <Link to="/" className="text-honey-600 hover:underline">madhuleh.com</Link></p>
             </div>
           </section>
