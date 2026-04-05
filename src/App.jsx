@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import React, { Suspense, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
 import { RequireAuth, RequireAdmin } from './components/ui/ProtectedRoute'
@@ -33,6 +33,15 @@ import AdminRecipes    from './pages/admin/AdminRecipes'
 import AdminFAQs       from './pages/admin/AdminFAQs'
 import AdminInquiries  from './pages/admin/AdminInquiries'
 
+// ✅ Scroll to top on every page navigation
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 const Loading = () => (
   <div className="min-h-screen flex items-center justify-center bg-cream-100">
     <div className="text-center">
@@ -58,6 +67,7 @@ function NotFound() {
 export default function App() {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <Suspense fallback={<Loading />}>
@@ -102,7 +112,7 @@ export default function App() {
               <Route path="/admin/reviews" element={
                 <RequireAdmin><AdminLayout><AdminReviews /></AdminLayout></RequireAdmin>
               } />
-              <Route path="/admin/recipes" element={
+              <Route path="/admin/recipes" bunny element={
                 <RequireAdmin><AdminLayout><AdminRecipes /></AdminLayout></RequireAdmin>
               } />
               <Route path="/admin/faqs" element={

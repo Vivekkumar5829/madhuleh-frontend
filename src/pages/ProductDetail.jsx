@@ -49,7 +49,6 @@ export default function ProductDetail() {
     </div>
   )
 
-  // ✅ Fixed: use imageUrl not url
   const images   = product.images?.length ? product.images : [{ imageUrl: IMG_FALLBACK }]
   const price    = parseFloat(product.price || 0)
   const compare  = parseFloat(product.compareAtPrice || 0)
@@ -69,7 +68,7 @@ export default function ProductDetail() {
     setSub(true)
     try {
       await reviewsAPI.create({ productId: product.id, ...revForm })
-      toast.success('Review submitted for approval!')
+      toast.success('Review submitted successfully! 🍯')
       setRevForm({ rating: 5, title: '', body: '' })
       refetchReviews()
     } catch (err) {
@@ -95,7 +94,6 @@ export default function ProductDetail() {
           {/* ── Images ── */}
           <div className="space-y-4">
             <div className="aspect-square rounded-3xl overflow-hidden bg-white shadow-card">
-              {/* ✅ Fixed: imageUrl not url */}
               <img src={images[imgIdx]?.imageUrl || IMG_FALLBACK} alt={product.name}
                 className="w-full h-full object-cover"
                 onError={e => { e.currentTarget.src = IMG_FALLBACK }} />
@@ -105,7 +103,6 @@ export default function ProductDetail() {
                 {images.map((img, i) => (
                   <button key={i} onClick={() => setImg(i)}
                     className={`w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${i === imgIdx ? 'border-honey-500' : 'border-transparent'}`}>
-                    {/* ✅ Fixed: imageUrl not url */}
                     <img src={img.imageUrl} alt="" className="w-full h-full object-cover"
                       onError={e => { e.currentTarget.src = IMG_FALLBACK }} />
                   </button>
@@ -256,8 +253,9 @@ export default function ProductDetail() {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
+                        {/* ✅ Fixed: use userFirstName and userLastName from ReviewResponse DTO */}
                         <p className="font-bold text-sm text-bark-900">
-                          {r.user?.firstName} {r.user?.lastName?.charAt(0)}.
+                          {r.userFirstName} {r.userLastName?.charAt(0)}.
                         </p>
                         {r.verifiedPurchase && (
                           <span className="badge bg-green-100 text-green-700">Verified</span>
