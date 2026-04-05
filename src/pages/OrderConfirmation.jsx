@@ -95,14 +95,19 @@ export default function OrderConfirmation() {
             <h3 className="font-bold text-bark-900 mb-4 text-sm">Price Breakdown</h3>
             <div className="space-y-2.5 text-sm">
               {[
-                ['Subtotal',     `₹${parseFloat(order.subtotal).toFixed(0)}`],
-                ['Shipping',     parseFloat(order.shippingCost) === 0 ? 'FREE' : `₹${parseFloat(order.shippingCost).toFixed(0)}`],
-                ['GST',          `₹${parseFloat(order.taxAmount).toFixed(0)}`],
+                ['Subtotal', `₹${parseFloat(order.subtotal).toFixed(0)}`],
+                ['Shipping', parseFloat(order.shippingCost) === 0 ? 'FREE' : `₹${parseFloat(order.shippingCost).toFixed(0)}`],
+                // ✅ GST included in price — no separate amount
+                ['GST', 'Included in price'],
                 order.discountAmount > 0 ? ['Discount', `-₹${parseFloat(order.discountAmount).toFixed(0)}`] : null,
               ].filter(Boolean).map(([k, v]) => (
                 <div key={k} className="flex justify-between">
                   <span className="text-gray-500">{k}</span>
-                  <span className="font-semibold">{v}</span>
+                  <span className={`font-semibold ${
+                    v.startsWith('-') ? 'text-green-600' :
+                    v === 'FREE' || v === 'Included in price' ? 'text-green-600' :
+                    'text-bark-900'
+                  }`}>{v}</span>
                 </div>
               ))}
               <div className="border-t pt-2.5 flex justify-between font-bold">
@@ -112,7 +117,8 @@ export default function OrderConfirmation() {
             </div>
             <div className="mt-3 pt-3 border-t text-xs space-y-1">
               <div className="flex justify-between text-gray-500">
-                <span>Payment</span><span className="font-medium">{order.paymentMethod?.replace(/_/g,' ')}</span>
+                <span>Payment</span>
+                <span className="font-medium">{order.paymentMethod?.replace(/_/g,' ')}</span>
               </div>
               <div className="flex justify-between text-gray-500">
                 <span>Status</span>
@@ -144,6 +150,9 @@ export default function OrderConfirmation() {
             Continue Shopping <ArrowRight size={16} />
           </Link>
         </div>
+
+        {/* Stay in the hive */}
+        <p className="text-center text-xs text-gray-400 mt-8">Stay in the hive 🍯</p>
       </div>
     </div>
   )

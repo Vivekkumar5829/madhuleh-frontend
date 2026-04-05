@@ -27,7 +27,6 @@ export default function AdminOrders() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-orders', page],
-    // ✅ Fixed: use getAllOrders instead of getMyOrders
     queryFn:  () => ordersAPI.getAllOrders({ page, size: 15 }).then(unwrap),
     keepPreviousData: true,
   })
@@ -85,7 +84,6 @@ export default function AdminOrders() {
                     <td className="px-4 py-3 font-mono font-bold text-bark-900 text-xs">
                       #{o.orderNumber}
                     </td>
-                    {/* ✅ Added: customer name column */}
                     <td className="px-4 py-3">
                       <p className="text-xs font-semibold text-bark-900">
                         {o.shippingFirstName} {o.shippingLastName}
@@ -182,11 +180,21 @@ export default function AdminOrders() {
               {[
                 ['Subtotal', `₹${parseFloat(detail.subtotal).toFixed(0)}`],
                 ['Shipping', parseFloat(detail.shippingCost) === 0 ? 'FREE' : `₹${parseFloat(detail.shippingCost).toFixed(0)}`],
-                ['GST',      `₹${parseFloat(detail.taxAmount).toFixed(0)}`],
-                ['Total',    `₹${parseFloat(detail.totalAmount).toFixed(0)}`],
-              ].map(([k, v]) => (
-                <div key={k} className={`flex justify-between ${k === 'Total' ? 'font-bold text-bark-900 border-t pt-1.5 mt-1.5' : 'text-gray-500'}`}>
-                  <span>{k}</span><span>{v}</span>
+                // ✅ GST included in price
+                ['GST', 'Included in price'],
+                detail.discountAmount > 0 ? ['Discount', `-₹${parseFloat(detail.discountAmount).toFixed(0)}`] : null,
+                ['Total', `₹${parseFloat(detail.totalAmount).toFixed(0)}`],
+              ].filter(Boolean).map(([k, v]) => (
+                <div key={k} className={`flex justify-between ${
+                  k === 'Total' ? 'font-bold text-bark-900 border-t pt-1.5 mt-1.5' :
+                  v === 'Included in price' || v === 'FREE' ? 'text-green-600' :
+                  'text-gray-500'
+                }`}>
+                  <span>{k}</span>
+                  <span className={`${
+                    v === 'Included in price' || v === 'FREE' ? 'font-semibold text-green-600' :
+                    v?.startsWith('-') ? 'font-semibold text-green-600' : ''
+                  }`}>{v}</span>
                 </div>
               ))}
             </div>
