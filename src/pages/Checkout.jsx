@@ -37,9 +37,9 @@ export default function Checkout() {
   const [placing,    setPlacing]   = useState(false)
   const [valCoupon,  setValCoupon] = useState(false)
 
-  const shipping = subtotal >= 499 ? 0 : 60
-  const tax      = +(subtotal * 0.18).toFixed(2)
-  const total    = +(subtotal + shipping + tax - discount).toFixed(2)
+  // ✅ GST included in price — no separate tax calculation
+  const shipping = subtotal >= 499 ? 0 : 49
+  const total    = +(subtotal + shipping - discount).toFixed(2)
 
   if (!user) return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
@@ -134,7 +134,6 @@ export default function Checkout() {
         image: 'https://res.cloudinary.com/dfh9jk0h6/image/upload/v1774464409/Madhuleh_pdf__2__page-0001-removebg-preview_mkvudm.png',
         order_id: order.razorpayOrderId,
         handler: async (response) => {
-          // Log what Razorpay returns
           console.log('Razorpay response:', response)
           try {
             await ordersAPI.verifyPayment({
@@ -315,12 +314,16 @@ export default function Checkout() {
                 {[
                   ['Subtotal', `₹${subtotal.toFixed(0)}`],
                   ['Shipping', shipping === 0 ? 'FREE' : `₹${shipping}`],
-                  ['GST (18%)', `₹${tax.toFixed(0)}`],
+                  ['GST', 'Included in price'],
                   discount > 0 ? ['Coupon Discount', `-₹${discount.toFixed(0)}`] : null,
                 ].filter(Boolean).map(([k, v]) => (
                   <div key={k} className="flex justify-between">
                     <span className="text-gray-500">{k}</span>
-                    <span className={`font-semibold ${v.startsWith('-') ? 'text-green-600' : v === 'FREE' ? 'text-green-600' : 'text-bark-900'}`}>{v}</span>
+                    <span className={`font-semibold ${
+                      v.startsWith('-') ? 'text-green-600' :
+                      v === 'FREE' || v === 'Included in price' ? 'text-green-600' :
+                      'text-bark-900'
+                    }`}>{v}</span>
                   </div>
                 ))}
                 <div className="border-t border-gray-100 pt-2.5 flex justify-between font-bold">
