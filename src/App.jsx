@@ -32,6 +32,9 @@ import AdminReviews    from './pages/admin/AdminReviews'
 import AdminRecipes    from './pages/admin/AdminRecipes'
 import AdminFAQs       from './pages/admin/AdminFAQs'
 import AdminInquiries  from './pages/admin/AdminInquiries'
+import PrivacyPolicy   from './pages/PrivacyPolicy'
+import TermsOfService  from './pages/TermsOfService'
+import ShippingPolicy  from './pages/ShippingPolicy'
 
 // ✅ Scroll to top on every page navigation
 function ScrollToTop() {
@@ -83,6 +86,9 @@ export default function App() {
               <Route path="/contact"         element={<Layout><Contact /></Layout>} />
               <Route path="/auth"            element={<Auth />} />
               <Route path="/cart"            element={<Layout><Cart /></Layout>} />
+              <Route path="/privacy-policy"   element={<Layout><PrivacyPolicy /></Layout>} />
+              <Route path="/terms-of-service" element={<Layout><TermsOfService /></Layout>} />
+              <Route path="/shipping-policy"  element={<Layout><ShippingPolicy /></Layout>} />
 
               {/* ── Email auth routes ────────────────────── */}
               <Route path="/verify-email"    element={<VerifyEmail />} />
