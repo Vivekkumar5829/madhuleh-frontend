@@ -26,9 +26,9 @@ const LINKS = {
     { to: "/contact", l: "Contact Us" },
   ],
   Legal: [
-    { to: "/privacy", l: "Privacy Policy" },
-    { to: "/terms", l: "Terms of Service" },
-    { to: "/shipping", l: "Shipping Policy" },
+    { to: "/privacy-policy",   l: "Privacy Policy" },
+    { to: "/terms-of-service", l: "Terms of Service" },
+    { to: "/shipping-policy",  l: "Shipping Policy" },
   ],
 };
 
