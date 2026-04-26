@@ -170,23 +170,37 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-cream-200/40">
-            © {new Date().getFullYear()} Madhuleh. All rights reserved. Made
-            with 🍯 in India.
-          </p>
-          <div className="flex items-center gap-3">
-            {["UPI", "Razorpay", "COD"].map((p) => (
-              <span
-                key={p}
-                className="text-[10px] font-bold text-cream-200/40 border border-white/10 rounded-md px-2 py-1"
-              >
-                {p}
-              </span>
-            ))}
-          </div>
-        </div>
+  <div className="container py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p className="text-xs text-cream-200/40">
+      © {new Date().getFullYear()} Madhuleh. All rights reserved. Made
+      with 🍯 in India.
+    </p>
+    <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
+        {["UPI", "Razorpay", "COD"].map((p) => (
+          <span
+            key={p}
+            className="text-[10px] font-bold text-cream-200/40 border border-white/10 rounded-md px-2 py-1"
+          >
+            {p}
+          </span>
+        ))}
       </div>
+      {/* ✅ Built by Coderiva */}
+      <p className="text-[10px] text-cream-200/30">
+        Built by{" "}
+        
+        <a  href="https://coderiva.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-honey-500/60 hover:text-honey-400 transition-colors"
+        >
+          Coderiva
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
     </footer>
   );
 }
